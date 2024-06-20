@@ -106,6 +106,7 @@ export function is_valid_pill(term: NarrowTerm): boolean {
         case "is":
             return [
                 "dm",
+                "private",
                 "starred",
                 "mentioned",
                 "alerted",
