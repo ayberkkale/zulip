@@ -151,6 +151,12 @@
  *
  *   This is useful for complicated typeaheads that have custom logic
  *   for setting their element's contents after an item is selected.
+ *
+ * 18. Add `hideAfterSelect` option.
+ *
+ *   This is useful for custom situations where we want to hide the
+ *   typeahead after selecting an option, instead of the default call
+ *   to lookup().
  * ============================================================ */
 
 import $ from "jquery";
@@ -258,6 +264,9 @@ export class Typeahead<ItemType extends string | object> {
     // don't set the html content of the div from this module, and
     // it's handled from the caller (or updater function) instead.
     updateElementContent: boolean;
+    // Used for custom situations where we want to hide the typeahead
+    // after selecting an option, instead of the default call to lookup().
+    hideAfterSelect: () => boolean;
 
     constructor(input_element: TypeaheadInputElement, options: TypeaheadOptions<ItemType>) {
         this.input_element = input_element;
@@ -298,6 +307,7 @@ export class Typeahead<ItemType extends string | object> {
         this.requireHighlight = options.requireHighlight ?? true;
         this.shouldHighlightFirstResult = options.shouldHighlightFirstResult ?? (() => true);
         this.updateElementContent = options.updateElementContent ?? true;
+        this.hideAfterSelect = options.hideAfterSelect ?? (() => false);
 
         // The naturalSearch option causes arrow keys to immediately
         // update the search box with the underlying values from the
@@ -336,6 +346,9 @@ export class Typeahead<ItemType extends string | object> {
             this.input_element.$element.trigger("change");
         }
 
+        if (this.hideAfterSelect()) {
+            return this.hide();
+        }
         return this.lookup(true);
     }
 
@@ -823,4 +836,5 @@ type TypeaheadOptions<ItemType> = {
     requireHighlight?: boolean;
     shouldHighlightFirstResult?: () => boolean;
     updateElementContent?: boolean;
+    hideAfterSelect?: () => boolean;
 };
