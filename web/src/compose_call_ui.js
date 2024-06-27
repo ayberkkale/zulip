@@ -121,8 +121,8 @@ export function generate_and_insert_audio_or_video_call_link($target_element, is
         });
     } else {
         // TODO: Use `new URL` to generate the URLs here.
-        const video_call_id = util.random_int(100000000000000, 999999999999999);
-        const video_call_link = compose_call.get_jitsi_server_url() + "/" + video_call_id;
+        const video_call_id = util.random_int(1000000000, 9999999999);
+        const video_call_link = compose_call.get_jitsi_server_url() + "/zulip_" + video_call_id;
         if (is_audio_call) {
             insert_audio_call_url(
                 video_call_link + "#config.startWithVideoMuted=true",
